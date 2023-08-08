@@ -1,0 +1,227 @@
+{
+	"name": "emvscode-web",
+	"displayName": "VSCode Mizar Extension for the Web",
+	"description": "A web extension for VS Code which provides support for the Mizar language.",
+	"version": "0.15.0",
+	"publisher": "Ryutaro-Matsumoto",
+	"engines": {
+		"vscode": "^1.66.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onLanguage:Mizar"
+	],
+	"browser": "./dist/web/extension.js",
+	"contributes": {
+		"configuration": {
+			"title": "Mizar",
+			"properties": {
+				"Mizar.repositoryUrl": {
+					"type": "string",
+					"default": "",
+					"description": "URL of your mizar repository"
+				},
+				"Mizar.OAthToken": {
+					"type": "string",
+					"default": "",
+					"markdownDescription": "Your personal access token (classic, scope: repo) - generate one at [https://github.com/settings/tokens](https://github.com/settings/tokens)"
+				},
+				"Mizar.format.MAX_LINE_LENGTH": {
+					"type": "string",
+					"default": "80"
+				},
+				"Mizar.format.STANDARD_INDENTATION_WIDTH": {
+					"type": "string",
+					"default": "2"
+				},
+				"Mizar.format.ENVIRON_DIRECTIVE_INDENTATION_WIDTH": {
+					"type": "string",
+					"default": "1"
+				},
+				"Mizar.format.ENVIRON_LINE_INDENTATION_WIDTH": {
+					"type": "string",
+					"default": "6"
+				},
+				"Mizar.format.CUT_CENTER_SPACE": {
+					"type": "object",
+					"default": { ": __label": true, "__label :": true }
+				},
+				"Mizar.format.CUT_LEFT_SPACE": {
+					"type": "array",
+					"default": [ ":", ",", ";", ")", "]", "}", "sch", "def" ]
+				},
+				"Mizar.format.CUT_RIGHT_SPACE": {
+					"type": "array",
+					"default": [ ";", "(", "[", "{" ]
+				}
+
+			}
+		},
+		"commands": [
+			{
+				"category": "Mizar",
+				"command": "mizar-verify",
+				"title": "Mizar Compile"
+			},
+			{
+				"category": "Mizar",
+				"command": "mizar-irrths",
+				"title": "Irrelevant Theorems"
+			},
+			{
+				"category": "Mizar",
+				"command": "mizar-relinfer",
+				"title": "Irrelevant Inferences"
+			},
+			{
+				"category": "Mizar",
+				"command": "mizar-trivdemo",
+				"title": "Trivial Proofs"
+			},
+			{
+				"category": "Mizar",
+				"command": "mizar-reliters",
+				"title": "Irrelevant Iterative Steps"
+			},
+			{
+				"category": "Mizar",
+				"command": "mizar-relprem",
+				"title": "Irrelevant Premises"
+			},
+			{
+				"category": "Mizar",
+				"command": "mizar-irrvoc",
+				"title": "Irrelevant Vocabularies"
+			},
+			{
+				"category": "Mizar",
+				"command": "mizar-inacc",
+				"title": "Inaccessible Items"
+			},
+			{
+				"category": "Mizar",
+				"command": "mizar-chklab",
+				"title": "Irrelevant Label"
+			},
+			{
+				"category": "Mizar",
+				"command": "stop-command",
+				"title": "Stop Command"
+			},
+			{
+				"category": "Mizar",
+				"command": "format-mizar",
+				"title": "Format Mizar file"
+			}
+		],
+		"languages": [
+			{
+				"id": "Mizar",
+				"aliases": [
+					"Mizar",
+					"Mizar"
+				],
+				"extensions": [
+					".miz"
+				],
+				"configuration": "./language-configuration.json"
+			}
+		],
+		"menus": {
+			"editor/title/run": [
+				{
+					"when": "resourceLangId == Mizar",
+					"command": "mizar-verify",
+					"group": "1_run"
+				},
+				{
+					"when": "resourceLangId == Mizar",
+					"command": "stop-command"
+				},
+				{
+					"when": "resourceLangId == Mizar",
+					"command": "format-mizar"
+				},
+				{
+					"when": "resourceLangId == Mizar",
+					"command": "mizar-irrths",
+					"group": "Irrelevant Utilities"
+				},
+				{
+					"when": "resourceLangId == Mizar",
+					"command": "mizar-relinfer",
+					"group": "Irrelevant Utilities"
+				},
+				{
+					"when": "resourceLangId == Mizar",
+					"command": "mizar-trivdemo",
+					"group": "Irrelevant Utilities"
+				},
+				{
+					"when": "resourceLangId == Mizar",
+					"command": "mizar-reliters",
+					"group": "Irrelevant Utilities"
+				},
+				{
+					"when": "resourceLangId == Mizar",
+					"command": "mizar-relprem",
+					"group": "Irrelevant Utilities"
+				},
+				{
+					"when": "resourceLangId == Mizar",
+					"command": "mizar-irrvoc",
+					"group": "Irrelevant Utilities"
+				},
+				{
+					"when": "resourceLangId == Mizar",
+					"command": "mizar-inacc",
+					"group": "Irrelevant Utilities"
+				},
+				{
+					"when": "resourceLangId == Mizar",
+					"command": "mizar-chklab",
+					"group": "Irrelevant Utilities"
+				}
+			]
+		},
+		"grammars": [
+			{
+				"language": "Mizar",
+				"scopeName": "source.miz",
+				"path": "./syntaxes/Mizar.tmLanguage.json"
+			}
+		]
+	},
+	"scripts": {
+		"test": "vscode-test-web --browserType=chromium --extensionDevelopmentPath=. --extensionTestsPath=dist/web/test/suite/index.js",
+		"pretest": "npm run compile-web",
+		"vscode:prepublish": "npm run package-web",
+		"compile-web": "webpack",
+		"watch": "webpack --watch",
+		"package-web": "webpack --mode production --devtool hidden-source-map",
+		"lint": "eslint src --ext ts",
+		"run-in-browser": "vscode-test-web --browserType=chromium --extensionDevelopmentPath=. ."
+	},
+	"devDependencies": {
+		"@types/mocha": "^9.1.0",
+		"@types/vscode": "^1.66.0",
+		"@types/webpack-env": "^1.16.3",
+		"@typescript-eslint/eslint-plugin": "^5.16.0",
+		"@typescript-eslint/parser": "^5.16.0",
+		"@vscode/test-web": "^0.0.24",
+		"assert": "^2.0.0",
+		"eslint": "^8.11.0",
+		"mocha": "^9.2.2",
+		"process": "^0.11.10",
+		"ts-loader": "^9.2.8",
+		"typescript": "^4.5.5",
+		"webpack": "^5.70.0",
+		"webpack-cli": "^4.9.2"
+	},
+	"dependencies": {
+		"@octokit/rest": "^19.0.11",
+		"path-browserify": "^1.0.1"
+	}
+}
